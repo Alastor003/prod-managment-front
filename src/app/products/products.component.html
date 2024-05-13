@@ -1,0 +1,91 @@
+
+<div class="container my-5">
+  <label>Filtro</label>
+  <input class="form-control" matInput (keyup)="applyFilter($event)" #input>
+</div>
+
+<div class="mat-elevation-z8 container">
+
+  <button class="my-3" mat-raised-button color="warn" routerLink="/dashboard/add-product">Nuevo</button>
+
+  <table mat-table [dataSource]="dataSource" matSort>
+
+     <ng-container matColumnDef="Title">
+         <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+         <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+     </ng-container>
+
+     <ng-container matColumnDef="SKU">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> SKU </th>
+      <td mat-cell *matCellDef="let row"> {{row.sku}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Grams">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Grams </th>
+      <td mat-cell *matCellDef="let row"> {{row.grams}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Stock">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Stock </th>
+      <td mat-cell *matCellDef="let row"> {{row.stock}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+      <td mat-cell *matCellDef="let row"> {{row.price}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Barcode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Barcode </th>
+      <td mat-cell *matCellDef="let row"> {{row.barcode}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+          <button [routerLink]="['/dashboard/add-product/' + row.idProduct]" style="background-color: transparent; border: none">
+              <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: #09BCA8;">edit</mat-icon>
+          </button>
+      </td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let row">
+          <button  (click)="openModal(row.idProduct)" style="background-color: transparent; border: none">
+              <mat-icon class="color-red" aria-hidden="false" aria-label="Example home icon" >delete</mat-icon>
+          </button>
+      </td>
+  </ng-container>
+
+     <tr mat-header-row *matHeaderRowDef="columns"></tr>
+     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+
+     <tr class="mat-row" *matNoDataRow>
+         <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+     </tr>
+
+ </table>
+ <mat-paginator  [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+
+ <!-- Modal -->
+ <div class="modal" style="display: inline !important; background-color: rgba(123, 118, 118, 0.9); text-align: center;" *ngIf="modal==true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button mat-button class="btn-close" data-bs-dismiss="modal" aria-label="Close"  (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body" style="align-content: center;" >
+        ¿Esta seguro que desea eliminar este producto?
+      </div>
+      <div class="modal-footer">
+        <button mat-button class="btn btn-outline-success" data-bs-dismiss="modal" (click)="closeModal()">Cancelar</button>
+        <button mat-button class="btn btn-outline-danger" (click)="deleteProduct()" >Borrar</button>
+      </div>
+    </div>
+  </div>
+</div>
